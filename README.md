@@ -1,15 +1,45 @@
-# RL24_homework3
+# HM3 RL 24/25 Arsen Hudyma
 
-## First task
+Hi, this is the repository for the HM3 of the course 'Robotics Lab'. In this homework we're be using as before ros2 and gazebo to spawn the already presented iiwa manipulator, but also we'll use some world models for gazebo to visualize a blue spherical element and visualize it thought the camera sensor mounted on the EE of the robot. And that's not all, because we'll be also using openCV functionalities to implement a node that practically will do a task of blob (or object) detection thought the data acquired from the camera sensor.
 
-### Reguarding the first point of the HM3, it's necessary to check what is the envinroment spawning in the gazebo world (we need to spawn that one with the sphere) (it would also be cool to specify the choosen gazebo world by some parameter passed trough the launch). When the launch file is configured like we want we can start it by the command:
-- ros2 launch iiwa_bringup iiwa.launch.py use_sim:=true use_vision:=true
-### So the simulation starts in gazebo and with the camera being mounted correctly.
+To start, you'll need this repository on your computer, so get it by:
+```bash
+git clone https://github.com/arsen-hdm/RL_HM3.git
+```
+Apart of the repository, give a look at my presentation of this HW so that it can be more clear and for better understanding of the things I've done.
+Consider that it's a powerpoint and in some parts it may contain videos, so remember to look at it ;)
 
-### Then to check the correct execution of the first task of the HM3 we need to start the ros2 node that uses openCV to detect che blue sphere and shows the result. This node can be launched by the command:
-- ros2 run ros2_opencv ros2_opencv_node
-### Once the node starts, a small image will be displayed and if the camera sees the sphere it will be present in the image and surrounded by a red circle (this will be the sign that the object is correcly detected.
+Then, once you're in the dockek container, firstly:
+```bash
+colcon build
+. install/setup.bash
+```
 
-## Second task
+### Simulation in gazebo, with the camera being mounted
+In this homework we're supposed to mount a camera on the robot, but in function of the boolean parameter *use_vision*, since it's a vision oriented task we'll need always the camera being active.
+The command to start the simulation is:
+```bash
+ros2 launch iiwa_bringup iiwa.launch.py use_sim:=true use_vision:=true
+```
+We can be sure that the camera is working simply adding the image display functionality in gazebo (remember to start effectively the simulation by the play button in the lower left of the gazebo window).
 
-### I didn't accomplish so much in the second task, but i did the recognition of the arucotag via the camera. So for proving this, firstly the iiwa launch file must be modified so the world in which is spawned the iiwa contains also the arucotag and then the simulation in gazebo can be started (the same command as for the first task). Then we also need to launch the other nodes that are available on our RL24 github page (like the one for the identification of the arucotag, and the ones to use the camera).
+'An important thing to remember' is to know which is the world loaded by gazebo, we can see it in the launch file of the iiwa (the iiwa.launch.py), and notice also in the presentation of this homework.
+The world with the arucotag is the *empty.world* and the one with the blue sphere is *empty_and_a_sphere.world*. In this case we need the second one (for now).
+
+### Running the blob detector
+After starting the iiwa we need to start the blob detector node, once started a small window will pop-up, if the desired object is recognized we'll see a red circle around it.
+Try to impose the circularity of the detected object to zero, if everything will work fine the sphere will not me detected, becayse of its form ;)
+However, the command to start the node is this one:
+```bash
+ros2 run ros2_opencv ros2_opencv_node
+```
+
+For now it'all but soon I'll add the other part of this HW and the last one, the HW4. See you soon" ;)
+
+### Sending position commands
+For last, if you want also to send some position commands to the robot so that it moves as desired, you must run the previous command but also:
+```bash
+ros2 run arm_control control_node
+```
+Remember that if you want to change the desired positions of the joints you need to do simple modifications in the node src code of the arm_control package. The part of code is specified in the presentation with also the path to it.
+Thanks for the attention, you can find also other homeworks in my personal repositories!
