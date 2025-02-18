@@ -36,10 +36,31 @@ ros2 run ros2_opencv ros2_opencv_node
 
 For now it'all but soon I'll add the other part of this HW and the last one, the HW4. See you soon" ;)
 
-### Sending position commands
-For last, if you want also to send some position commands to the robot so that it moves as desired, you must run the previous command but also:
+### Using the aruco tag
+For the second part of the HW you have to load a gazebo world containg an aruco tag, for changing the spawning world you must go in the iiwa.launch.py file, give a look at the ppt of this homework to see how to do it simply ;)
+Once you modified the launch file, firstly you must:
 ```bash
-ros2 run arm_control control_node
+colcon build
+. install/setup.bash
 ```
-Remember that if you want to change the desired positions of the joints you need to do simple modifications in the node src code of the arm_control package. The part of code is specified in the presentation with also the path to it.
-Thanks for the attention, you can find also other homeworks in my personal repositories!
+Then the command to load the iiwa is basically the same, so:
+```bash
+ros2 launch iiwa_bringup iiwa.launch.py use_sim:=true use_vision:=true
+```
+Then you have to launch the usb cam executable, in my case I launch it with the default parameter that you should have, otherwise use your way if it works :) Mine command is:
+```bash
+ros2 run usb_cam usb_cam_node_exe --ros-args --params-file src/ros2_vision/config/camera_params.yaml -r /image_raw:=/stereo/left/image_rect_color -r /camera_info:=/stereo/left/camera_info
+```
+Then start the simple aruco node with the launch file:
+```bash
+ros2 launch aruco_ros single.launch.py marker_size:=0.1 marker_id:=201
+```
+Mine doesn't work properly sometimes so if you want to see it working check my presentation, hope it helps.
+
+If the aruco detector works properly then you can try to start the kdl vision node, by default its set to velocity commands and positioning task (also the only one implemented.
+So give it a try and if it works let me know!
+```bash
+ros2 run ros2_kdl_package ros2_kdl_vision
+```
+
+Thanks for the attention, you can find also other homeworks in my personal repositories! Goodbye and to the next one!
